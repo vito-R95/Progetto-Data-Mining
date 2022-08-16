@@ -1,0 +1,122 @@
+---
+title: "Progetto data mining"
+author: "Ruggiero Vito"
+date: "10/6/2020"
+output: pdf_document
+---
+cereali<-read.csv("cereal.csv", header = TRUE, sep = ",")
+View(cereali)
+C=cereali[,4:12]
+View(C)
+names(C)
+str(C)
+
+#CLUSTER ANALYSIS
+standardizza=scale(C)
+dist_e=dist(standardizza)
+dist_e
+legCompleto=hclust(dist_e,method = "complete")
+legCompleto
+summary(legCompleto)
+legCompleto$merge
+plot(legCompleto,main = "Complete Linkage")
+Clusterone=cutree(legCompleto,6)
+abline(h=6,col="green")
+legMedio=hclust(dist_e,method = "average")
+legMedio
+summary(legMedio)
+legMedio$merge
+plot(legMedio,main = "Average Linkage")
+Clustertwo=cutree(legMedio,5)
+abline(h=5,col="green")
+legSingolo=hclust(dist_e,method = "single")
+legSingolo
+summary(legSingolo)
+legSingolo$merge
+plot(legSingolo,main = "Single Linkage")
+Clusterthree=cutree(legSingolo,2.9)
+abline(h=2.9,col="green")
+legCentroid=hclust(dist_e, method = "centroid")
+legCentroid
+summary(legCentroid)
+legCentroid$merge
+plot(legCentroid,main="Centroid Linkage")
+Clusterfour=cutree(legCentroid,2.6)
+abline(h=2.6,col="green")
+par(mfrow=c(2,2))
+plot(legCompleto,main = "Complete Linkage")
+Clusterone=cutree(legCompleto,6)
+abline(h=6,col="green")
+plot(legMedio,main = "Average Linkage")
+Clustertwo=cutree(legMedio,5)
+abline(h=5,col="green")
+plot(legSingolo,main = "Single Linkage")
+Clusterthree=cutree(legSingolo,2.9)
+abline(h=2.9,col="green")
+plot(legCentroid,main="Centroid Linkage")
+Clusterfour=cutree(legCentroid,2.6)
+abline(h=2.6,col="green")
+
+#ANALISI DELLE COMPONENTI PRINCIPALI
+righe=nrow(C)
+colonne=ncol(C)
+MCorrelazione=cor(C)
+MCorrelazione
+av=eigen(MCorrelazione)
+autoValori=av$values
+autoVettori=av$vectors
+autoValori
+autoVettori
+varSpiegata=autoValori/colonne
+varSpiegata
+varSpiegataCumulata=cumsum(varSpiegata)
+varSpiegataCumulata
+plot(varSpiegataCumulata,type="o", ylab="Cumulative Variance", xlab="Principal Component", col="blue")
+pca=prcomp(C,scale. = TRUE)
+summary(pca)
+plot(pca)
+biplot(pca)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
